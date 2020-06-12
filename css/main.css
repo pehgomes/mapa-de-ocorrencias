@@ -6,43 +6,40 @@ body {
 
   .container {
     max-width: 980px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
     padding: 50px 0;
     text-align: center;
-    width: 1000px;
+    width: 900px;
     height: 700px;
-    
     border-radius: 4px;
   }
 
   #mynetwork {
-    opacity: 50;
     flex: 1;
     padding: 15px;
     width: 900px;
-    height: 785px;
+    height: 580px;
     border: none;
     background-color: #222222;
-    background-image: url('../img/fortaleza-1.png');
+    background-image: url('../img/fortaleza-1.png') ;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 800px;
+    background-size: 580px;
     cursor: pointer;
   }
 
   .botoes {
-    padding: 50px 5px 10px;
+    margin-left: 5%;
     margin: 0 auto;
     display: flex;
-    width: 990px;
+    width: 900px;
   }
 
   .botoes button {
-    margin-top: 10px;
     border: 0px;
     border-radius: 4px;
-    height: 48px;
-    font-size: 16px;
+    height: 38px;
+    font-size: 12px;
     background-color: rgb(120, 71, 211);
     font-weight: bold;
     color: #fff;

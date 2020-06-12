@@ -3,32 +3,34 @@
 let color = 'blue';
 let len = undefined;
 
-let nodes = [{ id: 0, label: "0", color: '#6E6EFD', peso: 7 },
-{ id: 1, label: "1", color: '#6E6EFD', to: [0, 6], peso: 6 },
-{ id: 2, label: "2", color: '#6E6EFD', to: [0] , peso: 5},
-{ id: 3, label: "3", color: '#6E6EFD', to: [5] , peso: 4},
-{ id: 4, label: "4", color: '#6E6EFD', to: [3, 0] , peso: 2},
-{ id: 5, label: "5", color: '#6E6EFD', to: [4] , peso: 1},
-{ id: 6, label: "6", color: '#6E6EFD' , peso: 2},
-{ id: 7, label: "7", color: '#6E6EFD', to: [6, 0] , peso: 2},
-{ id: 8, label: "8", color: '#6E6EFD', to: [7, 3] , peso: 2},
-{ id: 9, label: "9", color: '#6E6EFD' , peso: 2},
-{ id: 10, label: "10", color: '#6E6EFD', to: [9, 4] , peso: 1},
+let nodes = [
+    { id: 0, label: "A", color: '#7847d3', to: [1, 2], peso: 2 },
+    { id: 1, label: "B", color: '#7847d3', to: [3, 5], peso: 6 },
+    { id: 2, label: "C", color: '#7847d3', to: [4], peso: 5 },
+    { id: 3, label: "D", color: '#7847d3', to: [4, 5], peso: 4 },
+    { id: 4, label: "E", color: '#7847d3', peso: 2 },
+    { id: 5, label: "F", color: '#7847d3', to: [4], peso: 1 },
+    // { id: 6, label: "F", color: '#6E6EFD' , peso: 2}
+    // { id: 7, label: "7", color: '#6E6EFD', to: [6, 0] , peso: 2},
+    // { id: 8, label: "8", color: '#6E6EFD', to: [7, 3] , peso: 2},
+    // { id: 9, label: "9", color: '#6E6EFD' , peso: 2},
+    // { id: 10, label: "10", color: '#6E6EFD', to: [9, 4] , peso: 1},
 
 ];
-let edges = [{ from: 1, to: 0 },
-{ from: 2, to: 0 },
-{ from: 4, to: 3 },
-{ from: 5, to: 4 },
-{ from: 4, to: 0 },
-{ from: 7, to: 6 },
-{ from: 8, to: 7 },
-{ from: 7, to: 0 },
-{ from: 10, to: 9 },
-{ from: 10, to: 4 },
-{ from: 1, to: 6 },
-{ from: 8, to: 3 },
-{ from: 3, to: 5 }
+let edges = [
+    { from: 0, to: 1, w: 10, label: '10 km' },
+    { from: 0, to: 2, w: 15, label: '15 km' },
+    { from: 1, to: 3, w: 12, label: '12 km' },
+    { from: 1, to: 5, w: 15, label: '15 km' },
+    { from: 2, to: 4, w: 10, label: '10 km' },
+    { from: 3, to: 4, w: 2, label: '2 km' },
+    { from: 3, to: 5, w: 1, label: '1 km' },
+    { from: 5, to: 4, w: 5, label: '5 km' }
+    //{ from: 10, to: 9 },
+    //{ from: 10, to: 4 },
+    //{ from: 1, to: 6 },
+    //{ from: 8, to: 3 },
+    //{ from: 3, to: 5 }
 ]
 
 var container = document.getElementById('mynetwork');
@@ -39,6 +41,7 @@ var data = {
 var options = {
     physics: false,
     nodes: {
+        color:'#7847d3',
         shape: 'dot',
         size: 15,
         font: {
@@ -48,7 +51,13 @@ var options = {
         borderWidth: 2
     },
     edges: {
-        width: 2
+        width: 2,
+        color: '#04d361',
+          smooth: false,
+          font: {
+              size: 15,
+              color: '#000000'
+          }
     }, interaction: {
         zoomView: false,
         dragView: false
@@ -101,10 +110,9 @@ function add() {
 
 
 
-function dijkstra(inicial) {
+function dijkstra() {
     let grafo = new Grafo(nodes)
-    let raiz = new No(nodes[0]);
-    console.log(grafo);
+    let raiz = grafo.nos[0];
     calcularCaminhosMaisCurtos(grafo, raiz);
 }
 
@@ -120,8 +128,8 @@ function calcularCaminhosMaisCurtos(grafo, raiz) {
         nosIndefinidos.splice(nosIndefinidos.indexOf(noAtual), 1);
 
         noAtual.adjacencias.forEach(parAdjacente => {
-            let noAdjacente = parAdjacente;
-            let pesoAresta = parAdjacente.peso;
+            let noAdjacente = parAdjacente.destino;
+            let pesoAresta = parAdjacente.distancia;
 
             if (!nosDefinidos.some(no => no.id === noAdjacente.id)) {
                 calcularDistanciaMinima(noAdjacente, pesoAresta, noAtual);
@@ -177,11 +185,18 @@ class Grafo {
         this.nos.forEach(no => {
             if (no["idsAdjacentes"] != undefined) {
                 no["idsAdjacentes"].forEach(id => {
-                    let adjacencia = this.nos.filter(nodeFinded => { return nodeFinded["id"] == id });
-                    no.adjacencias.push(adjacencia);
+                    let adjacenciaFiltrada = this.nos.filter(nodeFinded => { return nodeFinded["id"] == id });
+                    let adjacencia = adjacenciaFiltrada[0];
+                    let aresta = this.buscarAresta(no.id, adjacencia.id);
+                    no.adicionarDestino(adjacencia, aresta.w);
                 });
             }
         });
+    }
+
+    buscarAresta(de, para) {
+        let aresta = edges.filter(aresta => { return aresta['from'] == de && aresta['to'] == para });
+        return aresta[0];
     }
 
 }
