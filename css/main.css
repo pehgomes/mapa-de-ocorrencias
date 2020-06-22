@@ -2,24 +2,27 @@ body {
     background-color: #222222;
     margin: 0;
     padding: 0;
+    font-family:Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased !important;
   }
 
   .container {
+    display: flex;
     max-width: 980px;
-    margin: 0 auto 20px auto;
-    padding: 50px 0;
+    margin: auto auto auto 5%;
+    padding: 10px 20px 30px 30px;
     text-align: center;
-    width: 900px;
+    width: 1000px;
     height: 700px;
     border-radius: 4px;
   }
 
   #mynetwork {
     flex: 1;
-    padding: 15px;
-    width: 900px;
+    /*padding: 15px;
+     width: 800px;
     height: 580px;
-    border: none;
+    border: none; */
     background-color: #222222;
     background-image: url('../img/fortaleza-1.png') ;
     background-position: center;
@@ -44,6 +47,28 @@ body {
     font-weight: bold;
     color: #fff;
     cursor: pointer;
+  }
+
+  #result {
+    margin-top: 20%;
+    width: 200px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    border: 1px;
+    border-color: #fff;
+
+    -webkit-transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    -ms-transition: opacity .5s ease-in-out;
+    -o-transition: opacity .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
+  }
+
+  #result p {
+    font-size: 15px;
+    text-align: left;
   }
 
   canvas {
